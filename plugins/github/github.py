@@ -117,6 +117,8 @@ def _process_message(data):
                               text="Pull Request # %s" % pr_number,
                               attachments=attachment)
         if action:
+            if data['thread_ts']:
+                action['thread_ts'] = data['thread_ts']
             actions.append(action)
 
 
