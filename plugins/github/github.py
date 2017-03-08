@@ -29,6 +29,9 @@ def _process_message(data):
     if 'text' not in data:
         return
 
+    if data.get('thread_ts'):
+        return
+
     if "https://github.com" not in data['text']:
         return
 
@@ -69,7 +72,6 @@ def _process_message(data):
                 filename_hash, lr, begin_line_number = match.groups()
                 end_line_number = None  # no range in PR
                 master = True if lr == 'L' else False
-                print(filename_hash, begin_line_number)
                 snippet, filepath = get_pull_request_snippet(
                     owner, repo, pr_number, filename_hash, master,
                     begin_line_number, end_line_number)
@@ -117,8 +119,6 @@ def _process_message(data):
                               text="Pull Request # %s" % pr_number,
                               attachments=attachment)
         if action:
-            if data['thread_ts']:
-                action['thread_ts'] = data['thread_ts']
             actions.append(action)
 
 
