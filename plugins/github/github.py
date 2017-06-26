@@ -36,8 +36,9 @@ def _process_message(data):
     for url in potential_urls:
         url = url[1:-1]  # wrapped in "<>", cut the ends
         parsed_url = urlparse.urlparse(url)
+        # example link: https://github.com/phonegap/phonegap-app-developer/blob/master/www/js/deploy.js#L7-L12
         splitzies = parsed_url.path.split('/')
-        owner, repo, link_type = splitzies[1:4]
+        owner, repo, link_type, branch = splitzies[1:5]
         action = None
         if link_type in ["blob", "blame"]:
             filepath = '/'.join(splitzies[5:])
@@ -53,7 +54,7 @@ def _process_message(data):
                 begin_line_number, end_line_number = lines
 
             snippet = get_snippet(
-                owner, repo, filepath, begin_line_number, end_line_number)
+                owner, repo, filepath, begin_line_number, end_line_number, ref=branch)
 
             action = dict(method="files.upload",
                           channels=data['channel'],
