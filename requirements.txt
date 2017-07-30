@@ -2,4 +2,4 @@ requests
 python-daemon
 pyyaml
 websocket-client
-slackclient
+slackclient==1.0.5
