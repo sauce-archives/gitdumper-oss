@@ -101,6 +101,9 @@ def _process_message(data):
                 if not pr_data['body']:
                     pr_data['body'] = ("This PR has no description. \n"
                                        "%s, @%s" % (random.choice(responses), pr_data['committer']))
+                else:
+                    # clean out any HTML comments from the PR body
+                    pr_data['body'] = re.sub("<!--.*-->(\r?\n)+", "", pr_data['body'], flags=re.DOTALL)
 
                 jira_link = r"<{}/\1|\1>".format(config['JIRA_URL'])
                 title = jira_sub(jira_link, pr_data['title'])
